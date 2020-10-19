@@ -28,7 +28,7 @@ class MainViewModel : ViewModel() {
     }
 
     private fun setupTimer() {
-        TODO("Not yet implemented")
+        //TODO("Not yet implemented")
     }
 
 }

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.lifecycle.Observer
 import com.darobarts.breathe.R
 
@@ -17,9 +18,20 @@ class MainFragment : Fragment() {
 
     private lateinit var viewModel: MainViewModel
 
+    private lateinit var progressBar: ProgressBar
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.main_fragment, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        findViews(view)
+    }
+
+    private fun findViews(view: View) {
+        progressBar = view.findViewById(R.id.progressBar)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -50,7 +62,8 @@ class MainFragment : Fragment() {
     }
 
     private fun showLoadingState() {
-        TODO("Not yet implemented")
+        progressBar.visibility = View.VISIBLE
+        progressBar.isIndeterminate = true
     }
 
 }
