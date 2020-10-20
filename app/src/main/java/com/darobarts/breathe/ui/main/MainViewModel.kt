@@ -28,7 +28,7 @@ class MainViewModel : ViewModel() {
     }
 
     private fun setupTimer() {
-        //TODO("Not yet implemented")
+        _viewState.value = ViewState.InhaleStep(SECONDS_OF_INHALE)
     }
 
 }

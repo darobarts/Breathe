@@ -16,9 +16,13 @@ class MainFragment : Fragment() {
         fun newInstance() = MainFragment()
     }
 
+    private var switchBool: Boolean = true
+    private var animationInProgress = false
+
     private lateinit var viewModel: MainViewModel
 
     private lateinit var progressBar: ProgressBar
+    private lateinit var circularCounterView: CircularCounterView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -32,12 +36,12 @@ class MainFragment : Fragment() {
 
     private fun findViews(view: View) {
         progressBar = view.findViewById(R.id.progressBar)
+        circularCounterView = view.findViewById(R.id.circularCounter)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        // TODO: Use the ViewModel
         setupObservers()
     }
 
@@ -54,15 +58,33 @@ class MainFragment : Fragment() {
     }
 
     private fun showInhaleStep(inhaleStep: ViewState.InhaleStep) {
-        TODO("Not yet implemented")
+        hideLoadingState()
+        circularCounterView.visibility = View.VISIBLE
+        circularCounterView.setOnClickListener {
+            if (!animationInProgress) {
+                animationInProgress = true
+                if (switchBool) {
+                    circularCounterView.shrinkCircle(90, 50, 5000) { animationInProgress = false }
+                } else {
+                    circularCounterView.growCircle(50, 90, 5000) { animationInProgress = false }
+                }
+                switchBool = !switchBool
+            }
+        }
     }
 
     private fun showExhaleStep(exhaleStep: ViewState.ExhaleStep) {
+        hideLoadingState()
         TODO("Not yet implemented")
+    }
+
+    private fun hideLoadingState() {
+        progressBar.visibility = View.GONE
     }
 
     private fun showLoadingState() {
         progressBar.visibility = View.VISIBLE
+        circularCounterView.visibility = View.GONE
         progressBar.isIndeterminate = true
     }
 
