@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.lifecycle.Observer
 import com.darobarts.breathe.R
+import com.darobarts.breathe.databinding.MainFragmentBinding
 
 class MainFragment : Fragment() {
 
@@ -21,22 +22,12 @@ class MainFragment : Fragment() {
 
     private lateinit var viewModel: MainViewModel
 
-    private lateinit var progressBar: ProgressBar
-    private lateinit var circularCounterView: CircularCounterView
+    private lateinit var binding: MainFragmentBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.main_fragment, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        findViews(view)
-    }
-
-    private fun findViews(view: View) {
-        progressBar = view.findViewById(R.id.progressBar)
-        circularCounterView = view.findViewById(R.id.circularCounter)
+        binding = MainFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -57,16 +48,17 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun showInhaleStep(inhaleStep: ViewState.InhaleStep) {
+    private fun showInhaleStep(inhaleStep: ViewState.InhaleStep) = with(binding) {
         hideLoadingState()
-        circularCounterView.visibility = View.VISIBLE
-        circularCounterView.setOnClickListener {
+        circularCounter.bindView(90, 5000)
+        circularCounter.visibility = View.VISIBLE
+        circularCounter.setOnClickListener {
             if (!animationInProgress) {
                 animationInProgress = true
                 if (switchBool) {
-                    circularCounterView.shrinkCircle(90, 50, 5000) { animationInProgress = false }
+                    circularCounter.shrinkCircle(90, 50, 5000) { animationInProgress = false }
                 } else {
-                    circularCounterView.growCircle(50, 90, 5000) { animationInProgress = false }
+                    circularCounter.growCircle(50, 90, 5000) { animationInProgress = false }
                 }
                 switchBool = !switchBool
             }
@@ -79,12 +71,12 @@ class MainFragment : Fragment() {
     }
 
     private fun hideLoadingState() {
-        progressBar.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
     }
 
-    private fun showLoadingState() {
+    private fun showLoadingState() = with(binding) {
         progressBar.visibility = View.VISIBLE
-        circularCounterView.visibility = View.GONE
+        circularCounter.visibility = View.GONE
         progressBar.isIndeterminate = true
     }
 
