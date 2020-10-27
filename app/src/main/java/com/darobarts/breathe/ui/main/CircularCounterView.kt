@@ -8,6 +8,7 @@ import android.util.AttributeSet
 import android.util.TimeUtils
 import android.view.View
 import com.darobarts.breathe.R
+import java.io.Console
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
@@ -82,17 +83,26 @@ class CircularCounterView : View {
     }
 
     private fun getShrinkTimer(factorFrom: Int, factorTo: Int, duration: Long, onCompletion: (() -> Unit)? = null) = object : TimerTask() {
-        private var index = factorFrom.toDouble()
+        private var radiusPercent = factorFrom.toDouble()
+        private var radiusPercentDelta = calculateSizeChangeDuration(abs(factorFrom - factorTo), duration)
+        private var numIterations = duration.toDouble() / REFRESH_MS
         override fun run() {
-            radiusSizeFactor = index / 100
+            radiusSizeFactor = radiusPercent / 100
+            println("Radius factor: $radiusSizeFactor")
             updateRadius()
             invalidateOnUiThread()
-            index -= calculateSizeChangeDuration(abs(factorFrom - factorTo), duration)
-            if (index <= factorTo) {
+            radiusPercent -= radiusPercentDelta
+            numIterations--
+            if (numIterations <= 0) {
                 cancel()
                 onCompletion?.invoke()
             }
         }
+
+        //16 second refresh
+        //going from 90% to 50%
+        //duration we want is 5000 ms
+        //how many times do we redraw?
     }
 
     private fun invalidateOnUiThread() {
@@ -102,7 +112,7 @@ class CircularCounterView : View {
     }
 
     private fun calculateSizeChangeDuration(growthDiff: Int, duration: Long): Double {
-        val numIterationsNeeded = duration.toDouble() / growthDiff
+        val numIterationsNeeded = duration.toDouble() / REFRESH_MS
         return growthDiff.toDouble() / numIterationsNeeded
     }
 
