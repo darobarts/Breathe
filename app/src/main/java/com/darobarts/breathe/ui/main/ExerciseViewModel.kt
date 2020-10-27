@@ -11,7 +11,7 @@ sealed class ViewState {
     data class InhaleStep(val millisecondsToInhale: Long): ViewState()
 }
 
-class MainViewModel : ViewModel() {
+class ExerciseViewModel : ViewModel() {
 
     companion object {
         private const val SECONDS_OF_EXHALE: Long = 5

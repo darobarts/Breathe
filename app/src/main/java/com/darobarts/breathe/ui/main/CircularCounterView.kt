@@ -22,7 +22,7 @@ class CircularCounterView : View {
     companion object {
         private const val REFRESH_MS: Long = 16
         private const val TIMER_DELAY: Long = 0
-        private const val TIMER_SECOND_MS: Long = 1000
+        private const val TIMER_SECOND_MS: Long = 100
     }
 
     private var radius: Float = 0f
@@ -98,11 +98,6 @@ class CircularCounterView : View {
                 onCompletion?.invoke()
             }
         }
-
-        //16 second refresh
-        //going from 90% to 50%
-        //duration we want is 5000 ms
-        //how many times do we redraw?
     }
 
     private fun invalidateOnUiThread() {
@@ -144,10 +139,10 @@ class CircularCounterView : View {
 
     override fun onDraw(canvas: Canvas?) {
         textPaint.apply {
-            textSize = centerX / 2
+            textSize = centerX / 3
             isFakeBoldText = true
         }
         canvas?.drawCircle(centerX, centerY, radius, paint)
-        canvas?.drawText("${durationRemaining}s", centerX, centerY, textPaint)
+        canvas?.drawText(String.format("%1.1f", durationRemaining.toDouble() /1000), centerX, centerY, textPaint)
     }
 }

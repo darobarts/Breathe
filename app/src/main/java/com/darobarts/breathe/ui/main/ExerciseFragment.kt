@@ -2,28 +2,23 @@ package com.darobarts.breathe.ui.main
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.os.CountDownTimer
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import androidx.lifecycle.Observer
-import com.darobarts.breathe.R
 import com.darobarts.breathe.databinding.MainFragmentBinding
-import java.util.concurrent.TimeUnit
 
-class MainFragment : Fragment() {
+class ExerciseFragment : Fragment() {
 
     companion object {
-        fun newInstance() = MainFragment()
+        fun newInstance() = ExerciseFragment()
     }
 
-    private var timer: CountDownTimer? = null
     private var switchBool: Boolean = true
     private var animationInProgress = false
 
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: ExerciseViewModel
 
     private lateinit var binding: MainFragmentBinding
 
@@ -35,14 +30,14 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(ExerciseViewModel::class.java)
         setupObservers()
         setClickListeners()
     }
 
     private fun setClickListeners() {
         binding.testButton.setOnClickListener {
-            setupTimer()
+            //TODO
         }
     }
 
@@ -58,30 +53,11 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun setupTimer() {
-        timer?.cancel()
-        timer = object : CountDownTimer(TimeUnit.SECONDS.toMillis(5), 50) {
-            override fun onTick(millisUntilFinished: Long) {
-                binding.countdown.text = getCountdownString(millisUntilFinished)
-            }
-
-            override fun onFinish() {
-                binding.countdown.text = getCountdownString(0)
-                viewModel.onStepFinished()
-            }
-        }.start()
-    }
-
-    private fun getCountdownString(msRemaining: Long): String {
-        return String.format("%1.1f", msRemaining.toDouble() / 1000)
-    }
-
     private fun showInhaleStep(inhaleStep: ViewState.InhaleStep) = with(binding) {
         hideLoadingState()
         circularCounter.bindView(90, inhaleStep.millisecondsToInhale)
         circularCounter.visibility = View.VISIBLE
         circularCounter.setOnClickListener {
-            setupTimer()
             if (!animationInProgress) {
                 animationInProgress = true
                 if (switchBool) {
@@ -108,10 +84,4 @@ class MainFragment : Fragment() {
         circularCounter.visibility = View.GONE
         progressBar.isIndeterminate = true
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        timer?.cancel()
-    }
-
 }
