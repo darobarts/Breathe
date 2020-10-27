@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 import java.util.concurrent.TimeUnit
 
 sealed class ViewState {
-    object Loading: ViewState()
-    data class ExhaleStep(val secondsLeft: Int): ViewState()
-    data class InhaleStep(val millisecondsToInhale: Long): ViewState()
+    object Loading : ViewState()
+    data class ExhaleStep(val secondsLeft: Int) : ViewState()
+    data class InhaleStep(val millisecondsToInhale: Long) : ViewState()
 }
 
 class ExerciseViewModel : ViewModel() {
@@ -19,7 +19,7 @@ class ExerciseViewModel : ViewModel() {
     }
 
     val viewState: LiveData<ViewState>
-    get() = _viewState
+        get() = _viewState
 
     private var _viewState = MutableLiveData<ViewState>()
 

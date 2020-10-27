@@ -1,12 +1,12 @@
 package com.darobarts.breathe.ui.main
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.darobarts.breathe.databinding.MainFragmentBinding
 
 class ExerciseFragment : Fragment() {
@@ -22,8 +22,10 @@ class ExerciseFragment : Fragment() {
 
     private lateinit var binding: MainFragmentBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = MainFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -61,9 +63,17 @@ class ExerciseFragment : Fragment() {
             if (!animationInProgress) {
                 animationInProgress = true
                 if (switchBool) {
-                    circularCounter.shrinkCircle(90, 50, inhaleStep.millisecondsToInhale) { animationInProgress = false }
+                    circularCounter.shrinkCircle(
+                        90,
+                        50,
+                        inhaleStep.millisecondsToInhale
+                    ) { animationInProgress = false }
                 } else {
-                    circularCounter.growCircle(50, 90, inhaleStep.millisecondsToInhale) { animationInProgress = false }
+                    circularCounter.growCircle(
+                        50,
+                        90,
+                        inhaleStep.millisecondsToInhale
+                    ) { animationInProgress = false }
                 }
                 switchBool = !switchBool
             }
